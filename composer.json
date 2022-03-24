@@ -1,5 +1,5 @@
 {
-    "name": "clnt/servd",
+    "name": "clntdev/servd",
     "description": "Docker PHP Development Environment",
     "keywords": ["docker", "servd", "valet", "localdev", "console", "cli"],
     "type": "project",

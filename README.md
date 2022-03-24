@@ -2,15 +2,15 @@
 ServD is a Docker PHP development environment heavily inspired by Laravel Valet and Laradock, it supports multiple projects
 within a working directory and primarily runs on [Alpine Linux](https://alpinelinux.org/).
 
-In its current form, it installs the majority of PHP Extensions available, including xdebug which currently adds 
+In its current form, it installs the majority of PHP Extensions available, including xdebug which currently adds
 slower performance than expected. This will change and these extensions will be able to be toggled in a future release.
 
-It offers PHP, Node.js, Database Software and PHP Composer version selection making it easy to change the environment 
+It offers PHP, Node.js, Database Software and PHP Composer version selection making it easy to change the environment
 to suit your needs.
 
 ## Installation
 
-Install via composer globally by running `composer global require clnt/servd` - once this has finished type `servd` into the CLI and ensure it returns a list of commands.
+Install via composer globally by running `composer global require clntdev/servd` - once this has finished type `servd` into the CLI and ensure it returns a list of commands.
 
 - Run the `servd install` command to setup required services and generate the `.servd` folder which will be located within the home directory.
 - Run the `servd start` command after completing the installation steps, this will pull/build images and then start up the configured services.
