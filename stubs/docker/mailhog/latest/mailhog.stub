@@ -1,0 +1,11 @@
+  mailhog:
+    image: mailhog/mailhog
+    restart: unless-stopped
+    logging:
+      driver: 'none'
+    ports:
+      - 1025:1025
+      - 8025:8025
+    networks:
+      - servd
+    container_name: servd_mailhog

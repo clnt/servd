@@ -1,0 +1,21 @@
+server {
+    server_name {{$serverName}};
+    root    {{$directoryRoot}};
+
+    {{$driverNginxConfiguration}}
+
+    listen  443 ssl;
+    ssl_certificate {{$sslCertificate}};
+    ssl_certificate_key {{$sslCertificateKey}};
+}
+
+server {
+    listen  80;
+    server_name {{$serverName}};
+
+    if ($host = {{$serverName}}) {
+        return 301 https://$host$request_uri;
+    }
+
+    return 404;
+}

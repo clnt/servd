@@ -1,0 +1,18 @@
+  pgsql:
+    image: 'postgres:13'
+    ports:
+      - '${POSTGRESQL_DB_PORT:-5432}:5432'
+    environment:
+      PGPASSWORD: '${MYSQL_DB_PASSWORD:-secret}'
+      POSTGRES_DB: '${MYSQL_DB_DATABASE}'
+      POSTGRES_USER: '${MYSQL_DB_USERNAME}'
+      POSTGRES_PASSWORD: '${MYSQL_DB_PASSWORD:-secret}'
+    volumes:
+      - 'pgsql_data:/var/lib/postgresql/data'
+    networks:
+      - servd
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "${MYSQL_DB_DATABASE}", "-U", "${MYSQL_DB_USERNAME}"]
+      retries: 3
+      timeout: 5s
+    container_name: servd_pgsql

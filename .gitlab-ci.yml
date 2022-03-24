@@ -1,0 +1,142 @@
+stages:
+  - docker
+  - build
+  - lint
+  - test
+#  - deploy
+
+# ========= Anchors (Partials) =========
+.php_base: &php_base
+  image: $CI_REGISTRY_IMAGE/php:7.4
+  tags:
+    - docker
+
+.test_base: &test_base
+  stage: test
+  before_script:
+    - rm -rf vendor
+    - php -d memory_limit=-1 /usr/bin/composer require --dev phpunit/phpunit:^$PHPUNIT_VERSION
+    - php -d memory_limit=-1 /usr/bin/composer install
+  script:
+    - composer du
+    - composer test:coverage
+  artifacts:
+    when: on_failure
+    expire_in: 4 hours
+    paths:
+      - storage/logs/
+    reports:
+      junit: coverage/phpunit.junit.xml
+      cobertura: coverage/cobertura.xml
+  coverage: /^\s*Lines:\s*\d+.\d+\%/
+  tags:
+    - docker
+
+.docker_base: &docker_base
+  stage: docker
+  image: docker:20.10.8-alpine3.14
+  services:
+    - docker:20.10.8-dind-alpine3.14
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  when: manual
+  tags:
+    - docker
+
+.docker_variables: &docker_variables
+  CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/$SERVICE_NAME
+  DOCKER_DRIVER: devicemapper
+  DOCKER_TLS_CERTDIR: ''
+  GIT_STRATEGY: fetch
+  GIT_DEPTH: "1"
+
+# ======================
+# Docker jobs
+# ======================
+docker:php74:
+  <<: *docker_base
+  variables:
+    SERVICE_NAME: php
+    PHP_VERSION: "7.4"
+    <<: *docker_variables
+  script:
+    - docker pull $CONTAINER_IMAGE:$PHP_VERSION || true
+    - docker build --cache-from $CONTAINER_IMAGE:$PHP_VERSION --build-arg PHP_IMAGE=php:$PHP_VERSION -t $CONTAINER_IMAGE:$PHP_VERSION ./.docker/$SERVICE_NAME
+    - docker push $CONTAINER_IMAGE:$PHP_VERSION
+
+docker:php80:
+  <<: *docker_base
+  variables:
+    SERVICE_NAME: php
+    PHP_VERSION: "8.0"
+    <<: *docker_variables
+  script:
+    - docker pull $CONTAINER_IMAGE:$PHP_VERSION || true
+    - docker build --cache-from $CONTAINER_IMAGE:$PHP_VERSION --build-arg PHP_IMAGE=php:$PHP_VERSION -t $CONTAINER_IMAGE:$PHP_VERSION ./.docker/$SERVICE_NAME
+    - docker push $CONTAINER_IMAGE:$PHP_VERSION
+
+docker:php81:
+  <<: *docker_base
+  variables:
+    SERVICE_NAME: php
+    PHP_VERSION: "8.1"
+    <<: *docker_variables
+  script:
+    - docker pull $CONTAINER_IMAGE:$PHP_VERSION || true
+    - docker build --cache-from $CONTAINER_IMAGE:$PHP_VERSION --build-arg PHP_IMAGE=php:$PHP_VERSION -t $CONTAINER_IMAGE:$PHP_VERSION ./.docker/$SERVICE_NAME
+    - docker push $CONTAINER_IMAGE:$PHP_VERSION
+
+# ======================
+# Build jobs
+# ======================
+build:php:
+  <<: *php_base
+  stage: build
+#  services:
+#    - name: $CI_REGISTRY_IMAGE/redis
+#      alias: redis
+  script:
+    - composer install
+  artifacts:
+    paths:
+      - vendor/
+    expire_in: 2 hours
+  cache:
+    paths:
+      - vendor
+    key: php
+
+# ======================
+# Lint jobs
+# ======================
+lint:phpcs:
+  <<: *php_base
+  stage: lint
+  script:
+    - composer lint
+  dependencies:
+    - build:php
+
+# ======================
+# Test jobs
+# ======================
+test:php74:
+  <<: *test_base
+  image: $CI_REGISTRY_IMAGE/php:7.4
+  variables:
+    PHPUNIT_VERSION: "9.5"
+    PARATEST_VERSION: "4"
+
+test:php80:
+  <<: *test_base
+  image: $CI_REGISTRY_IMAGE/php:8.0
+  variables:
+    PHPUNIT_VERSION: "9.5"
+    PARATEST_VERSION: "4"
+
+test:php81:
+  <<: *test_base
+  image: $CI_REGISTRY_IMAGE/php:8.1
+  variables:
+    PHPUNIT_VERSION: "9.5"
+    PARATEST_VERSION: "4"

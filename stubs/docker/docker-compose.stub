@@ -1,0 +1,33 @@
+# This docker-compose yaml file should boot everything
+version: '3'
+
+networks:
+  servd:
+    driver: bridge
+
+services:
+  servd:
+    build:
+      context: ./services/servd/build
+      dockerfile: Dockerfile
+      args:
+        NODE_VERSION: '${NODE_VERSION}'
+        PHP_VERSION: '${PHP_VERSION}'
+        COMPOSER_VERSION: '${COMPOSER_VERSION}'
+    image: 'servd-core:${PHP_VERSION}'
+    user: "1000:1000"
+    ports:
+      - '${HTTP_PORT:-80}:8080'
+      - '${HTTPS_PORT:-443}:443'
+      - '${PHP_FPM_PORT:-9000}:9000'
+    volumes:
+      - ${WORKING_DIRECTORY}:/var/www
+      - ${DATA_DIRECTORY}pages:/var/www-default
+      - ${DATA_DIRECTORY}services/servd/build/sites:/etc/nginx/http.d
+      - ${DATA_DIRECTORY}certificates:/etc/nginx/ssl
+    networks:
+      - servd
+    container_name: servd_core
+{{$dependsOn}}
+{{$services}}
+{{$volumes}}

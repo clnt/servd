@@ -1,0 +1,15 @@
+  mariadb:
+    image: 'mariadb:10.5-focal'
+    ports:
+      - '${MARIADB_DB_PORT:-3306}:3306'
+    command: --max_allowed_packet=500M
+    environment:
+      MARIADB_PASSWORD: '${MARIADB_DB_PASSWORD}'
+      MARIADB_ROOT_PASSWORD: '${MARIADB_DB_PASSWORD}'
+      MARIADB_ROOT_HOST: '%'
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
+    volumes:
+      - 'mariadb_data:/var/lib/mysql'
+    networks:
+      - servd
+    container_name: servd_mariadb

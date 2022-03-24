@@ -1,0 +1,78 @@
+{
+    "name": "clnt/servd",
+    "description": "Docker PHP Development Environment",
+    "keywords": ["docker", "servd", "valet", "localdev", "console", "cli"],
+    "type": "project",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/clnt/servd/issues",
+        "source": "https://github.com/clnt/servd"
+    },
+    "authors": [
+        {
+            "name": "Matt Clinton",
+            "email": "matt@mattc.dev"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/database": "^8.40",
+        "illuminate/view": "^8.0",
+        "laminas/laminas-text": "^2.8",
+        "laravel-zero/framework": "^8.8"
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.9.1",
+        "mattc/coding-standards": "^1.0",
+        "mockery/mockery": "^1.4.3",
+        "pestphp/pest": "^1.3",
+        "phpunit/phpunit": "^9.5",
+        "squizlabs/php_codesniffer": "3.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories",
+            "Database\\Seeders\\": "database/seeds"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://composer.mattc.dev"
+        }
+    ],
+    "scripts": {
+        "test": "./vendor/bin/phpunit",
+        "test:coverage": [
+            "@putenv XDEBUG_MODE=coverage",
+            "vendor/bin/phpunit --log-junit=coverage/phpunit.junit.xml --coverage-cobertura=coverage/cobertura.xml --coverage-text"
+        ],
+        "stan": "vendor/bin/phpstan analyse",
+        "phpcs": "vendor/bin/phpcs ./app ./tests --ignore=./tests/Fake/UserHomeDirectory,Pest.php --runtime-set ignore_warnings_on_exit true --standard=./vendor/mattc/coding-standards/phpcs.xml",
+        "cbf": "vendor/bin/phpcbf ./app --standard=./vendor/mattc/coding-standards/phpcs.xml",
+        "php-lint": "vendor/bin/parallel-lint --exclude vendor .",
+        "doc-check": "vendor/bin/php-doc-check ./app",
+        "lint": [
+            "@composer php-lint",
+            "@composer phpcs"
+        ]
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "bin": ["servd"]
+}

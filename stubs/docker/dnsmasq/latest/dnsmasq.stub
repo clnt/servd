@@ -1,0 +1,12 @@
+  dnsmasq:
+    image: 4km3/dnsmasq
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "127.0.0.1:53:53/tcp"
+      - "127.0.0.1:53:53/udp"
+    command: --address=/.test/127.0.0.1 --server 8.8.8.8 --server 8.8.4.4 --log-facility=-
+    hostname: dnsmasq
+    domainname: test
+    container_name: servd_dnsmasq

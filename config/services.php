@@ -1,0 +1,91 @@
+<?php
+
+use App\Models\Service;
+
+return [
+    [
+        'type' => Service::TYPE_CORE,
+        'name' => 'ServD',
+        'service_name' => 'servd',
+        'version' => '8.0', // PHP Version
+        'port' => '22,80,443,9000',
+        'has_volume' => false,
+        'should_build' => true,
+    ],
+    [
+        'type' => Service::TYPE_DATABASE,
+        'name' => 'MySQL',
+        'description' => '(5.7 incompatible with arm64)',
+        'service_name' => 'mysql',
+        'version' => '5.7',
+        'port' => '3306',
+        'has_volume' => true,
+        'should_build' => true,
+    ],
+    [
+        'type' => Service::TYPE_DATABASE,
+        'name' => 'MySQL',
+        'description' => '(5.7 incompatible with arm64)',
+        'service_name' => 'mysql',
+        'version' => '8.0',
+        'port' => '3306',
+        'has_volume' => true,
+        'should_build' => true,
+    ],
+    [
+        'type' => Service::TYPE_DATABASE,
+        'name' => 'MariaDB',
+        'service_name' => 'mariadb',
+        'version' => '10.4',
+        'port' => '3306',
+        'has_volume' => true,
+    ],
+    [
+        'type' => Service::TYPE_DATABASE,
+        'service_name' => 'mariadb',
+        'name' => 'MariaDB',
+        'version' => '10.5',
+        'port' => '3306',
+        'has_volume' => true,
+    ],
+    [
+        'type' => Service::TYPE_DATABASE,
+        'name' => 'MariaDB',
+        'service_name' => 'mariadb',
+        'version' => '10.6',
+        'port' => '3306',
+        'has_volume' => true,
+    ],
+    [
+        'type' => Service::TYPE_DATABASE,
+        'name' => 'PostgreSQL',
+        'service_name' => 'pgsql',
+        'version' => '13',
+        'port' => '3306',
+        'has_volume' => true,
+    ],
+    [
+        'type' => Service::TYPE_MEMORY_STORE,
+        'name' => 'Redis',
+        'service_name' => 'redis',
+        'version' => 'latest',
+        'port' => '6379',
+        'has_volume' => true,
+    ],
+    [
+        'type' => Service::TYPE_OTHER,
+        'name' => 'Dnsmasq',
+        'service_name' => 'dnsmasq',
+        'version' => 'latest',
+        'port' => '53',
+        'has_volume' => false,
+    ],
+    [
+        'type' => Service::TYPE_OTHER,
+        'name' => 'Mailhog',
+        'service_name' => 'mailhog',
+        'version' => 'latest',
+        'port' => '8025,1025',
+        'has_volume' => false,
+    ],
+];
