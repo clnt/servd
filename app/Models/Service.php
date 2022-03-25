@@ -63,6 +63,10 @@ class Service extends Model
     public static function setupPredefinedServices(): void
     {
         collect(config('services'))->each(static function (array $service): void {
+            if ($service['service_name'] === 'servd' && self::where('service_name', 'servd')->exists()) {
+                return;
+            }
+
             self::updateOrCreate(
                 [
                     'service_name' => $service['service_name'],

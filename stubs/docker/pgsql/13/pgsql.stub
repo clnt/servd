@@ -8,7 +8,7 @@
       POSTGRES_USER: '${MYSQL_DB_USERNAME}'
       POSTGRES_PASSWORD: '${MYSQL_DB_PASSWORD:-secret}'
     volumes:
-      - 'pgsql_data:/var/lib/postgresql/data'
+      - ${DATA_DIRECTORY}databases/pgsql:/var/lib/postgresql/data
     networks:
       - servd
     healthcheck:

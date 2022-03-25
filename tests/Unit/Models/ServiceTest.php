@@ -58,6 +58,26 @@ class ServiceTest extends TestCase
     }
 
     /** @test */
+    public function it_does_not_create_a_duplicate_core_service_when_version_has_changed(): void
+    {
+        $this->assertEquals(0, Service::count());
+
+        Service::setupPredefinedServices();
+
+        $service = Service::where('service_name', 'servd')->firstOrFail();
+
+        $this->assertEquals('8.0', $service->version);
+
+        $service->update(['version' => '8.1']);
+
+        $this->assertEquals(1, Service::where('service_name', 'servd')->count());
+
+        Service::setupPredefinedServices();
+
+        $this->assertEquals(1, Service::where('service_name', 'servd')->count());
+    }
+
+    /** @test */
     public function it_can_get_enabled_services(): void
     {
         Service::factory()->create([

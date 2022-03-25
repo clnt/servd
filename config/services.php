@@ -19,7 +19,7 @@ return [
         'service_name' => 'mysql',
         'version' => '5.7',
         'port' => '3306',
-        'has_volume' => true,
+        'has_volume' => false,
         'should_build' => true,
     ],
     [
@@ -29,7 +29,7 @@ return [
         'service_name' => 'mysql',
         'version' => '8.0',
         'port' => '3306',
-        'has_volume' => true,
+        'has_volume' => false,
         'should_build' => true,
     ],
     [
@@ -46,7 +46,7 @@ return [
         'name' => 'MariaDB',
         'version' => '10.5',
         'port' => '3306',
-        'has_volume' => true,
+        'has_volume' => false,
     ],
     [
         'type' => Service::TYPE_DATABASE,
@@ -54,7 +54,7 @@ return [
         'service_name' => 'mariadb',
         'version' => '10.6',
         'port' => '3306',
-        'has_volume' => true,
+        'has_volume' => false,
     ],
     [
         'type' => Service::TYPE_DATABASE,
@@ -62,7 +62,7 @@ return [
         'service_name' => 'pgsql',
         'version' => '13',
         'port' => '3306',
-        'has_volume' => true,
+        'has_volume' => false,
     ],
     [
         'type' => Service::TYPE_MEMORY_STORE,

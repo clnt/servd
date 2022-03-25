@@ -121,9 +121,13 @@ class ServDocker
             File::makeDirectory($directory . 'services');
         }
 
-        $services->each(static function (Service $service) use ($directory): void {
+        $services->each(function (Service $service) use ($directory): void {
             if ($service->has_volume) {
                 return;
+            }
+
+            if ($this->shouldCreateDatabaseDirectory($service, $directory)) {
+                File::makeDirectory($directory . 'databases/' . $service->service_name, 0755, true);
             }
 
             if (File::exists($directory . 'services/' . $service->service_name) === false) {
@@ -145,6 +149,13 @@ class ServDocker
                     File::makeDirectory($path, 0755, true);
                 });
         });
+    }
+
+    private function shouldCreateDatabaseDirectory(Service $service, string $directory): bool
+    {
+        return $service->type === Service::TYPE_DATABASE && File::exists(
+            $directory . 'databases/' . $service->service_name
+        ) === false;
     }
 
     public function getDataDirectory(): ?string
