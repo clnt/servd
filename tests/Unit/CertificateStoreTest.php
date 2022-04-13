@@ -58,7 +58,11 @@ class CertificateStoreTest extends TestCase
 
         $this->mockCertificateGeneration($commonName);
 
+        File::delete($this->dataDirectory . '/certificates/servdCA.crt');
+
         app(CertificateStore::class)->generate($project);
+
+        File::put($this->dataDirectory . '/certificates/servdCA.crt', '');
     }
 
     /** @test */
@@ -71,7 +75,11 @@ class CertificateStoreTest extends TestCase
 
         $this->mockCertificateGeneration($commonName);
 
+        File::delete($this->dataDirectory . '/certificates/servdCA.crt');
+
         app(CertificateStore::class)->generate($project);
+
+        File::put($this->dataDirectory . '/certificates/servdCA.crt', '');
 
         $this->assertEquals(1, Certificate::count());
 
@@ -170,6 +178,18 @@ class CertificateStoreTest extends TestCase
         $project = Project::factory()->create();
 
         $this->assertTrue(CertificateStore::make()->remove($project));
+    }
+
+    /** @test */
+    public function it_can_run_the_expected_command_to_trust_root_ca_certificate_on_macos(): void
+    {
+        $certificate = $this->dataDirectory . 'certificates/servdCA.crt';
+
+        $this->cli->shouldReceive('passthrough')->with(
+            'sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ' . $certificate
+        )->once();
+
+        CertificateStore::make()->trustMacOsCA();
     }
 
     private function mockCertificateGeneration(string $commonName): void

@@ -40,6 +40,15 @@ class CertificateStore
         return $this->project;
     }
 
+    public function trustMacOsCA(): void
+    {
+        $certificate = $this->certDirectory . '/servdCA.crt';
+
+        $this->servd->runHostCommand(
+            "sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain {$certificate}"
+        );
+    }
+
     public function remove(Project $project): bool
     {
         $this->project = $project;
@@ -137,7 +146,7 @@ class CertificateStore
         return $this->commonName;
     }
 
-    protected function rootCertificateExists(): bool
+    public function rootCertificateExists(): bool
     {
         return File::exists($this->certDirectory . '/servdCA.crt');
     }

@@ -292,7 +292,9 @@ class ServDockerTest extends TestCase
     /** @test */
     public function it_can_open_an_interactive_shell_via_cli_method(): void
     {
-        $this->mockCli()->shouldReceive('passthrough')
+        $cli = $this->mockCli();
+        $cli->shouldReceive('doNotTimeout')->once();
+        $cli->shouldReceive('passthrough')
             ->with('docker exec -itw /var/www/' . basename(getcwd()) . ' servd_core /bin/sh')
             ->once();
 

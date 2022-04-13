@@ -23,6 +23,7 @@ class CliTest extends TestCase
     /** @test */
     public function it_can_run_the_cli_command_to_open_interactive_shell_for_the_core_container(): void
     {
+        $this->cli->shouldReceive('doNotTimeout')->once();
         $this->cli->shouldReceive('passthrough')
             ->with('docker exec -itw /var/www/' . basename(getcwd()) . ' servd_core /bin/sh')
             ->once();
@@ -35,6 +36,7 @@ class CliTest extends TestCase
     /** @test */
     public function it_can_run_the_cli_command_to_open_interactive_shell_for_a_given_container(): void
     {
+        $this->cli->shouldReceive('doNotTimeout')->once();
         $this->cli->shouldReceive('passthrough')
             ->with('docker exec -itw /var/www/' . basename(getcwd()) . ' servd_mariadb /bin/sh')
             ->once();

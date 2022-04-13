@@ -5,6 +5,7 @@ namespace Tests\Feature\Commands;
 use App\Models\Certificate;
 use App\Models\Project;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\File;
 use Tests\TestCase;
 
 class SecureTest extends TestCase
@@ -54,10 +55,14 @@ class SecureTest extends TestCase
         $this->mockCli()->shouldReceive('execRealTime')->times(5);
         $project = Project::factory()->create();
 
+        File::delete($this->fakeDataDirectoryPath() . '/certificates/servdCA.crt');
+
         $this->assertEquals(0, Certificate::count());
 
         $this->artisan('secure example-project')
             ->expectsOutput('Project certificate generated, reconfiguring and restarting services ✔');
+
+        File::put($this->fakeDataDirectoryPath() . '/certificates/servdCA.crt', '');
 
         $this->assertEquals(1, Certificate::count());
         $this->assertTrue($project->fresh()->isSecure());

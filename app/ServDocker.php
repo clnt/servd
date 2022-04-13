@@ -4,6 +4,7 @@ namespace App;
 
 use App\Console\DockerCommand;
 use App\Console\DockerComposeCommand;
+use App\Console\HostCommand;
 use App\Drivers\Exceptions\NoServicesEnabled;
 use App\Models\Service;
 use App\Models\Setting;
@@ -16,6 +17,8 @@ class ServDocker
     private string $directoryName = '.servd';
 
     private DockerComposer $composer;
+
+    protected CertificateStore $store;
 
     protected bool $isWindows = false;
 
@@ -106,7 +109,8 @@ class ServDocker
         return $this->runInteractiveDockerCommand(
             "exec -itw /var/www/{$this->getCurrentDirectoryName()}",
             $container,
-            '/bin/sh'
+            '/bin/sh',
+            true
         );
     }
 
@@ -236,6 +240,16 @@ class ServDocker
         return $this;
     }
 
+    public function runHostCommand(string $command): HostCommand
+    {
+        return tap(
+            HostCommand::make($command),
+            static function (HostCommand $command): void {
+                $command->interactive()->perform();
+            }
+        );
+    }
+
     private function setUnixDataDirectory(): string
     {
         Cache::put(
@@ -285,12 +299,16 @@ class ServDocker
         );
     }
 
-    private function runInteractiveDockerCommand(string $command, string $container, string $argument): DockerCommand
-    {
+    private function runInteractiveDockerCommand(
+        string $command,
+        string $container,
+        string $argument,
+        ?bool $doNotTimeout = null
+    ): DockerCommand {
         return tap(
             DockerCommand::make($command, $argument, $container),
-            static function (DockerCommand $command): void {
-                $command->interactive()->perform();
+            static function (DockerCommand $command) use ($doNotTimeout): void {
+                $doNotTimeout ? $command->doNotTimeout()->interactive()->perform() : $command->interactive()->perform();
             }
         );
     }
