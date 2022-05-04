@@ -68,7 +68,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, soap, intl, gd, exif, iconv, imagick
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, soap, intl, gd, exif, iconv, imagick, xdebug
           coverage: xdebug
 
       #      - name: Create temp database
@@ -80,7 +80,7 @@ jobs:
           cp .env.testing .env
           php -v
           ./vendor/phpunit/phpunit/phpunit --version
-          phpdbg -qrr ./vendor/phpunit/phpunit/phpunit -v --colors=never --stderr --coverage-clover=coverage.xml
+          ./vendor/phpunit/phpunit/phpunit --coverage-clover=coverage.xml
           export CODECOV_TOKEN=${{ secrets.CODECOV_TOKEN }}
           bash <(curl -s https://codecov.io/bash) || echo 'Codecov failed to upload'
 
