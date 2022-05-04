@@ -79,8 +79,6 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
         intl \
         ldap \
         mcrypt \
-        memcached \
-        mongodb \
         mysqli \
         pdo \
         pdo_mysql \
@@ -88,6 +86,7 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
         mbstring \
         soap \
         pcov \
+        sockets \
         sodium \
         sysvsem \
         sysvshm \

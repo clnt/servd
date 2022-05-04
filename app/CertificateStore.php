@@ -18,11 +18,14 @@ class CertificateStore
 
     protected string $commonName;
 
+    protected string $stubsPath;
+
     public function __construct(ServDocker $servd, ?Project $project = null)
     {
         $this->servd = $servd;
         $this->project = $project;
         $this->certDirectory = $servd->getDataDirectory() . 'certificates';
+        $this->stubsPath = base_path('stubs/configs/openssl');
     }
 
     public static function make(?Project $project = null): self
@@ -107,34 +110,41 @@ class CertificateStore
 
     public function generateRootCA(): bool
     {
-        $privateKeyCommand = "openssl genrsa -out '/etc/nginx/ssl/servdCA.key' 2048"; // Can this be removed?
-        $rootCertificateCommand = "openssl req -x509 -newkey rsa:2048 -nodes -keyout '/etc/nginx/ssl/servdCA.key' "
-            . "-days 1825 -out '/etc/nginx/ssl/servdCA.crt' -subj '/O=ServD Development Environment/C=UK'";
+        $privateKeyCommand = "openssl genrsa -out /etc/nginx/ssl/servdCA.key 2048";
+        $rootCertificateCommand = "openssl req -x509 -newkey rsa:2048 -nodes -keyout /etc/nginx/ssl/servdCA.key "
+            . "-days 1825 -out /etc/nginx/ssl/servdCA.crt -subj '/O=ServD Development Environment/C=UK'";
 
-        $this->servd->run($privateKeyCommand, $this->container);
-        $this->servd->run($rootCertificateCommand, $this->container);
+        $this->servd->shell($privateKeyCommand, $this->container);
+        $this->servd->shell($rootCertificateCommand, $this->container);
 
         return $this->rootCertificateExists();
     }
 
     protected function generateCsr(): bool
     {
-        $command = "openssl req -nodes -newkey rsa:2048 -keyout '/etc/nginx/ssl/{$this->commonName}.key' "
-            . "-out '/etc/nginx/ssl/{$this->commonName}.csr' -subj "
-            . "'/CN={$this->commonName}/O=ServD Development Environment/C=UK'";
+        $configurationFileName = $this->generateOpenSslConfiguration();
 
-        $this->servd->run($command, $this->container);
+        $command = "openssl req -new -sha256 -nodes -keyout /etc/nginx/ssl/{$this->commonName}.key "
+        . "-subj '/C=UK/ST=ServD Development Environment/O=ServD/OU=Development Environment/CN=*.{$this->commonName}'"
+        . " -reqexts SAN "
+        . "-config /etc/nginx/ssl/configs/{$configurationFileName} "
+        . "-out /etc/nginx/ssl/{$this->commonName}.csr";
+
+        $this->servd->shell($command, $this->container);
 
         return $this->certificatePrivateKeyExists() && $this->certificateCsrExists();
     }
 
     protected function generateCertificate(): bool
     {
-        $command = "openssl x509 -req -in '/etc/nginx/ssl/{$this->commonName}.csr' -CA '/etc/nginx/ssl/servdCA.crt' "
-            . "-CAkey '/etc/nginx/ssl/servdCA.key' -CAcreateserial "
-            . "-out '/etc/nginx/ssl/{$this->commonName}.crt' -days 1825 -sha256";
+        $command = "openssl x509 -req "
+            . "-extfile <(printf \"subjectAltName=DNS:{$this->commonName},DNS:*.{$this->commonName}\") "
+            . "-days 825 -in /etc/nginx/ssl/{$this->commonName}.csr -CA /etc/nginx/ssl/servdCA.crt "
+            . "-CAkey /etc/nginx/ssl/servdCA.key -CAcreateserial "
+            . "-out /etc/nginx/ssl/{$this->commonName}.crt "
+            . "-sha256";
 
-        $this->servd->run($command, $this->container);
+        $this->servd->shell($command, $this->container);
 
         return $this->certificateExists();
     }
@@ -144,6 +154,25 @@ class CertificateStore
         $this->commonName = $this->project->name . '.test';
 
         return $this->commonName;
+    }
+
+    protected function generateOpenSslConfiguration(): string
+    {
+        if (File::exists($this->certDirectory . '/configs') === false) {
+            File::makeDirectory($this->certDirectory . '/configs');
+        }
+
+        $configuration = str_replace(
+            ['{{$commonName}}'],
+            [$this->commonName],
+            file_get_contents($this->stubsPath . '/site-config.stub')
+        );
+
+        $fileName = $this->commonName . '-openssl.cnf';
+
+        File::put($this->certDirectory . '/configs/' . $fileName, $configuration);
+
+        return $fileName;
     }
 
     public function rootCertificateExists(): bool

@@ -4,6 +4,7 @@ namespace App;
 
 use App\Console\DockerCommand;
 use App\Console\DockerComposeCommand;
+use App\Console\DockerShellCommand;
 use App\Console\HostCommand;
 use App\Drivers\Exceptions\NoServicesEnabled;
 use App\Models\Service;
@@ -114,6 +115,11 @@ class ServDocker
         );
     }
 
+    public function shell(string $command, ?string $container = null): DockerShellCommand
+    {
+        return $this->runDockerShellCommand($command, $container);
+    }
+
     public function setupDockerServiceFiles(string $directory): void
     {
         File::copyDirectory(base_path('stubs/docker/servd'), $directory . 'services/servd');
@@ -216,7 +222,7 @@ class ServDocker
             return false;
         }
 
-        return filled($_SERVER['HOME']);
+        return filled($_SERVER['HOME'] ?? null);
     }
 
     public function isWindows(): bool
@@ -229,7 +235,7 @@ class ServDocker
             return false;
         }
 
-        return filled($_SERVER['HOMEDRIVE']);
+        return filled($_SERVER['HOMEDRIVE'] ?? null);
     }
 
     public function resetPlatformDetection(): self
@@ -294,6 +300,16 @@ class ServDocker
         return tap(
             DockerCommand::make($command, $argument, $container),
             static function (DockerCommand $command): void {
+                $command->realTime()->perform();
+            }
+        );
+    }
+
+    private function runDockerShellCommand(string $command, ?string $container): DockerShellCommand
+    {
+        return tap(
+            DockerShellCommand::make($command, $container),
+            static function (DockerShellCommand $command): void {
                 $command->realTime()->perform();
             }
         );

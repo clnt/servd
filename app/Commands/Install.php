@@ -89,6 +89,9 @@ class Install extends Command
         // Install Mailhog Option
         $this->installMailhog();
 
+        // Install Elasticsearch Option
+        $this->installElasticsearch();
+
         // Set working directory / park or set directory
         $this->setWorkingDirectory();
 
@@ -148,14 +151,15 @@ class Install extends Command
     {
         $this->databaseVersion = $this->choice(
             'Which version of ' . $this->databaseSoftware . ' would you like to use?',
-            Service::getServiceVersionChoices($this->databaseSoftware),
+            Service::getAvailableVersions(strtolower($this->databaseSoftware)),
         );
 
         Service::whereIn('service_name', ['mysql', 'mariadb'])->update(['enabled' => false]);
 
-        Service::where('service_name', $this->databaseSoftware)->where('version', $this->databaseVersion)
+        Service::where('service_name', $this->databaseSoftware)
             ->firstOrFail()
             ->update([
+                'version' => $this->databaseVersion,
                 'enabled' => true,
             ]);
 
@@ -294,5 +298,27 @@ class Install extends Command
             ]);
 
         $this->successMessage('Mailhog enabled successfully');
+    }
+
+    private function installElasticsearch(): void
+    {
+        if (ucwords($this->choice('Would you like to install Elasticsearch?', ['No', 'Yes'], 'No')) !== 'Yes') {
+            return;
+        }
+
+        $version = $this->choice(
+            'Which version of Elasticsearch would you like to install?',
+            Service::getAvailableVersions('elasticsearch'),
+            'latest'
+        );
+
+        Service::where('service_name', 'elasticsearch')
+            ->firstOrFail()
+            ->update([
+                'version' => $version,
+                'enabled' => true,
+            ]);
+
+        $this->successMessage("Elasticsearch {$version} enabled successfully");
     }
 }

@@ -109,6 +109,12 @@ class DockerComposer
     {
         $this->stubs = rtrim(
             $this->services->map(function (Service $service) {
+                if ($service->single_stub) {
+                    return str_replace('{{$version}}', $service->version, file_get_contents(
+                        "{$this->stubsPath}/{$service->service_name}/{$service->service_name}.stub"
+                    ));
+                }
+
                 return file_get_contents(
                     "{$this->stubsPath}/{$service->service_name}/{$service->version}/{$service->service_name}.stub"
                 );

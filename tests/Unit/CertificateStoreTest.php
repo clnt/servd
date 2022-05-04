@@ -194,30 +194,32 @@ class CertificateStoreTest extends TestCase
 
     private function mockCertificateGeneration(string $commonName): void
     {
-        $workingDirectory = basename(getcwd());
-
         // Generate Root CA private key.
         $this->cli->shouldReceive('execRealTime')
-            ->with("docker exec -w /var/www/" . $workingDirectory . " servd_core openssl genrsa "
-            . "-out '/etc/nginx/ssl/servdCA.key' 2048")->once();
+            ->with("docker exec servd_core /bin/sh -c \"openssl genrsa -out /etc/nginx/ssl/servdCA.key 2048\"")
+            ->once();
 
         // Generate Root CA certificate.
         $this->cli->shouldReceive('execRealTime')
-            ->with("docker exec -w /var/www/" . $workingDirectory . " servd_core openssl req -x509 "
-                . "-newkey rsa:2048 -nodes -keyout '/etc/nginx/ssl/servdCA.key' -days 1825 "
-            . "-out '/etc/nginx/ssl/servdCA.crt' -subj '/O=ServD Development Environment/C=UK'")->once();
+            ->with("docker exec servd_core /bin/sh -c \"openssl req -x509 "
+                . "-newkey rsa:2048 -nodes -keyout /etc/nginx/ssl/servdCA.key -days 1825 "
+            . "-out /etc/nginx/ssl/servdCA.crt -subj '/O=ServD Development Environment/C=UK'\"")->once();
 
         // Generate Intermediate certificate private key and CSR.
         $this->cli->shouldReceive('execRealTime')
-            ->with("docker exec -w /var/www/" . $workingDirectory . " servd_core openssl req -nodes "
-                . "-newkey rsa:2048 -keyout '/etc/nginx/ssl/{$commonName}.key' -out '/etc/nginx/ssl/{$commonName}.csr' "
-            . "-subj '/CN={$commonName}/O=ServD Development Environment/C=UK'")->once();
+            ->with("docker exec servd_core /bin/sh -c \"openssl req -new -sha256 -nodes "
+                . "-keyout /etc/nginx/ssl/{$commonName}.key "
+                . "-subj '/C=UK/ST=ServD Development Environment/O=ServD/OU=Development Environment/CN=*.{$commonName}'"
+                . " -reqexts SAN "
+                . "-config /etc/nginx/ssl/configs/{$commonName}-openssl.cnf "
+            . "-out /etc/nginx/ssl/{$commonName}.csr\"")->once();
 
         // Generate Intermediate certificate signed by Root CA.
         $this->cli->shouldReceive('execRealTime')
-            ->with("docker exec -w /var/www/" . $workingDirectory . " servd_core openssl x509 -req "
-                . "-in '/etc/nginx/ssl/{$commonName}.csr' -CA '/etc/nginx/ssl/servdCA.crt' "
-                . "-CAkey '/etc/nginx/ssl/servdCA.key' -CAcreateserial "
-            . "-out '/etc/nginx/ssl/{$commonName}.crt' -days 1825 -sha256");
+            ->with("docker exec servd_core /bin/sh -c \"openssl x509 -req "
+                . "-extfile <(printf \"subjectAltName=DNS:{$commonName},DNS:*.{$commonName}\") "
+                . "-days 825 -in /etc/nginx/ssl/{$commonName}.csr -CA /etc/nginx/ssl/servdCA.crt "
+                . "-CAkey /etc/nginx/ssl/servdCA.key -CAcreateserial "
+            . "-out /etc/nginx/ssl/{$commonName}.crt -sha256\"");
     }
 }

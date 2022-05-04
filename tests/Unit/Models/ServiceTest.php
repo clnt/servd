@@ -52,7 +52,7 @@ class ServiceTest extends TestCase
 
         Service::setupPredefinedServices();
 
-        $this->assertEquals(10, Service::count());
+        $this->assertEquals(8, Service::count());
         $this->assertEquals('servd', Service::first()->service_name);
         $this->assertEquals('8.0', Service::first()->version);
     }
@@ -90,5 +90,42 @@ class ServiceTest extends TestCase
         ]);
 
         $this->assertEquals(1, Service::enabled()->count());
+    }
+
+    /** @test */
+    public function it_can_get_the_available_service_versions(): void
+    {
+        $this->assertEquals(
+            [
+                '5.7' => '5.7',
+                '8.0' => '8.0',
+            ],
+            Service::getAvailableVersions('mysql')
+        );
+    }
+
+    /** @test */
+    public function it_can_get_the_expected_php_versions(): void
+    {
+        $this->assertEquals(
+            [
+                '7.4' => '7.4',
+                '8.0' => '8.0',
+                '8.1' => '8.1',
+            ],
+            Service::getPhpVersionChoices()
+        );
+    }
+
+    /** @test */
+    public function it_returns_latest_as_the_only_option_if_no_available_versions_defined(): void
+    {
+        $this->assertEquals(['latest'], Service::getAvailableVersions('redis'));
+    }
+
+    /** @test */
+    public function get_available_versions_returns_null_when_given_invalid_service(): void
+    {
+        $this->assertNull(Service::getAvailableVersions('invalid-service'));
     }
 }

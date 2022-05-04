@@ -1,7 +1,7 @@
 server {
     listen [::]:8080;
     listen 8080;
-    server_name {{$serverName}};
+    server_name *.{{$serverName}};
     root    {{$directoryRoot}};
 
     {{$driverNginxConfiguration}}

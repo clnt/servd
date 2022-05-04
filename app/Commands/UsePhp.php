@@ -36,7 +36,7 @@ class UsePhp extends Command
     {
         $this->version = $this->getArgument('version');
 
-        if (in_array((string) $this->version, array_values(Service::$phpVersions), true) === false) {
+        if (in_array((string) $this->version, array_values(Service::getPhpVersions()), true) === false) {
             $this->errorMessage('The given PHP version ' . $this->version . ' is not supported');
             return;
         }

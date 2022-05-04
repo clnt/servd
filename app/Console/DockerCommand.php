@@ -8,6 +8,8 @@ class DockerCommand extends DockerComposeCommand
 
     protected ?string $container;
 
+    public string $command;
+
     public function __construct(Cli $cli, string $command = '', string $argument = '', ?string $container = null)
     {
         $this->argument = $argument;

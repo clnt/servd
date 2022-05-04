@@ -30,6 +30,8 @@ class CreateServicesTable extends Migration
             $table->boolean('has_volume')->default(true);
             $table->boolean('should_build')->default(false);
             $table->text('service_folders')->nullable();
+            $table->boolean('single_stub')->default(false);
+            $table->text('available_versions')->nullable();
             $table->timestamps();
 
             $table->index(['enabled', 'type']);

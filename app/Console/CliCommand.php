@@ -39,6 +39,24 @@ abstract class CliCommand
     }
 
     /**
+     * Execute the command.
+     *
+     * @return string|int
+     */
+    public function perform()
+    {
+        if ($this->isInteractive()) {
+            return $this->cli->passthrough($this->prepare());
+        }
+
+        if ($this->isRealTime()) {
+            return $this->cli->execRealTime($this->prepare());
+        }
+
+        return $this->cli->exec($this->prepare());
+    }
+
+    /**
      * Append given string to the command.
      */
     public function append(?string $string = null): self
@@ -97,29 +115,11 @@ abstract class CliCommand
     }
 
     /**
-     * Check if we're expecting real0time output.
+     * Check if we're expecting realtime output.
      */
     public function isRealTime(): bool
     {
         return $this->realTime;
-    }
-
-    /**
-     * Execute the command.
-     *
-     * @return string|int
-     */
-    public function perform()
-    {
-        if ($this->isInteractive()) {
-            return $this->cli->passthrough($this->prepare());
-        }
-
-        if ($this->isRealTime()) {
-            return $this->cli->execRealTime($this->prepare());
-        }
-
-        return $this->cli->exec($this->prepare());
     }
 
     /**
@@ -133,7 +133,7 @@ abstract class CliCommand
     /**
      * Set the timeout for the Cli instance.
      */
-    public function setTimeout(int $seconds): DockerComposeCommand
+    public function setTimeout(int $seconds): self
     {
         $this->cli->setTimeout($seconds);
 
@@ -143,7 +143,7 @@ abstract class CliCommand
     /**
      * Remove the timeout for the Cli instance. (Just a nicer way to write it).
      */
-    public function doNotTimeout(): DockerComposeCommand
+    public function doNotTimeout(): self
     {
         $this->cli->doNotTimeout();
 

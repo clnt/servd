@@ -151,6 +151,7 @@ class InstallTest extends TestCase
             ->expectsOutput('Default database preference mariadb 10.5 successfully chosen ✔')
             ->expectsQuestion('Would you like to enable Mailhog?', 'Yes')
             ->expectsOutput('Mailhog enabled successfully ✔')
+            ->expectsQuestion('Would you like to install Elasticsearch?', 'No')
             ->expectsQuestion(
                 'What is the location of your working directory? Select '
                 . 'the current directory detected below or select '
@@ -174,7 +175,10 @@ class InstallTest extends TestCase
             ->expectsQuestion('Which version of mysql would you like to use?', '5.7')
             ->expectsOutput('Default database preference mysql 5.7 successfully chosen ✔')
             ->expectsQuestion('Would you like to enable Mailhog?', 'Yes')
-            ->expectsOutput('Mailhog enabled successfully ✔');
+            ->expectsOutput('Mailhog enabled successfully ✔')
+            ->expectsQuestion('Would you like to install Elasticsearch?', 'Yes')
+            ->expectsQuestion('Which version of Elasticsearch would you like to install?', '7.0')
+            ->expectsOutput('Elasticsearch 7.0 enabled successfully ✔');
     }
 
     protected function servdDatabaseInstallSetup(): PendingCommand

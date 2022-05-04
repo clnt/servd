@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 class Service extends Model
 {
@@ -30,6 +31,8 @@ class Service extends Model
         'has_volume',
         'should_build',
         'service_folders',
+        'single_stub',
+        'available_versions',
     ];
 
     public static array $nodeVersions = [
@@ -43,12 +46,6 @@ class Service extends Model
         'Do not install' => '0',
         'Composer v1 (Latest 1.x)' => '1',
         'Composer v2 (Latest 2.2.x LTS)' => '2',
-    ];
-
-    public static array $phpVersions = [
-        'PHP 7.4' => '7.4',
-        'PHP 8.0' => '8.0',
-        'PHP 8.1' => '8.1',
     ];
 
     public static function getServiceTypes(): array
@@ -81,6 +78,10 @@ class Service extends Model
                     'has_volume' => $service['has_volume'],
                     'should_build' => isset($service['should_build']) && $service['should_build'],
                     'service_folders' => $service['service_folders'] ?? null,
+                    'single_stub' => $service['single_stub'] ?? false,
+                    'available_versions' => isset(
+                        $service['available_versions']
+                    ) ? implode(',', $service['available_versions']) : null,
                 ]
             );
         });
@@ -100,20 +101,16 @@ class Service extends Model
             })->toArray();
     }
 
-    public static function getServiceVersionChoices(string $serviceName): array
+    public static function getPhpVersions(): array
     {
-        return self::where('service_name', $serviceName)
-            ->get()
-            ->mapWithKeys(function (Service $service): array {
-                return [$service->version => $service->name . ' ' . $service->version];
-            })->toArray();
+        return config('services')[0]['available_versions'];
     }
 
     public static function getPhpVersionChoices(): array
     {
-        return collect(self::$phpVersions)
-            ->mapWithKeys(function (string $version, string $label): array {
-                return [$version => $label];
+        return collect(self::getPhpVersions())
+            ->mapWithKeys(function (string $version): array {
+                return [$version => $version];
             })->toArray();
     }
 
@@ -131,6 +128,23 @@ class Service extends Model
             ->mapWithKeys(function (string $version, string $label): array {
                 return [$version => $label];
             })->toArray();
+    }
+
+    public static function getAvailableVersions(string $service): ?array
+    {
+        $definedService = collect(config('services'))->where('service_name', $service)->first();
+
+        if ($definedService === null) {
+            return null;
+        }
+
+        if (Arr::has($definedService, 'available_versions') === false) {
+            return ['latest'];
+        }
+
+        return collect(Arr::get($definedService, 'available_versions'))->mapWithKeys(
+            fn (string $version, $key): array => [is_int($key) ? $version : $key => $version]
+        )->toArray();
     }
 
     public function scopeEnabled(Builder $query): Builder

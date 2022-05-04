@@ -1,0 +1,20 @@
+  elasticsearch:
+    image: blacktop/elasticsearch:{{$version}}
+    hostname: elasticsearch
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    environment:
+      - discovery.type=single-node
+      - node.name=servd-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - servd
+    container_name: servd_elasticsearch

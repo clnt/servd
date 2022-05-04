@@ -45,6 +45,13 @@ class TestCase extends BaseTestCase
         $_SERVER['HOMEPATH'] = 'Users\\testuser\\tests\\Fake\\UserHomeDirectory';
     }
 
+    protected function defineUnsupportedEnvironment(): void
+    {
+        ServDocker::make()->resetPlatformDetection();
+
+        unset($_SERVER['HOMEDRIVE'], $_SERVER['HOMEPATH'], $_SERVER['HOME']);
+    }
+
     protected function fakeDataDirectoryPath(?bool $fullPath = null): string
     {
         if ($fullPath) {

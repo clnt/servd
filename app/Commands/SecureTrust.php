@@ -47,7 +47,7 @@ class SecureTrust extends Command
     {
         if ($this->servd->isWindows()) {
             $this->info(
-                'Please refer to the documentation on how to trust the root certificate on Windows (todo)'
+                'Please refer to the documentation on how to trust the root certificate on Windows'
             );
             return;
         }
@@ -63,7 +63,7 @@ class SecureTrust extends Command
     protected function confirmElevatedPrivileges(): bool
     {
         return $this->confirm(
-            'This command requires elevated privileges, do you wish to continue?',
+            'This command requires macOS and elevated privileges, do you wish to continue?',
             'yes'
         );
     }

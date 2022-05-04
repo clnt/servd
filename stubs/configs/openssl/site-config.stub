@@ -1,0 +1,28 @@
+[ req ]
+#default_bits           = 2048
+#default_md             = sha256
+#default_keyfile        = privkey.pem
+distinguished_name      = req_distinguished_name
+#attributes              = req_attributes
+
+[ req_distinguished_name ]
+countryName                     = UK
+countryName_min                 = 2
+countryName_max                 = 2
+stateOrProvinceName             = ServD Development Environment
+localityName                    = ServD Development Environment
+0.organizationName              = ServD Development Environment
+organizationalUnitName          = ServD Development Environment
+commonName                      = {{$commonName}}
+commonName_max                  = 64
+emailAddress                    = ssl@example.com
+emailAddress_max                = 64
+
+#[ req_attributes ]
+#challengePassword               = servd
+#challengePassword_min           = 4
+#challengePassword_max           = 20
+
+[SAN]
+subjectAltName=DNS:{{$commonName}}
+subjectAltName=DNS:*.{{$commonName}}
