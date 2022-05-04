@@ -42,7 +42,10 @@ class UsePhp extends Command
         }
 
         $this->task('Updating PHP version setting', function (): bool {
-            return (bool) Setting::updateValueByKey(Setting::KEY_PHP_VERSION, $this->version);
+            return Setting::updateValueByKey(Setting::KEY_PHP_VERSION, $this->version) && Service::where(
+                'service_name',
+                'servd'
+            )->update(['version' => $this->version]);
         });
 
         Artisan::call('configure');
