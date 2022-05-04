@@ -61,7 +61,7 @@ class Install extends Command
 
         // Setup SQLite database
         $this->setupSqliteDatabase();
-        $this->call('migrate', ['--force']);
+        $this->call('migrate', ['--force' => true]);
 
         $this->servd->persistDataDirectoryPath();
 

@@ -1,5 +1,5 @@
 server {
-    server_name *.{{$serverName}};
+    server_name {{$serverName}} *.{{$serverName}};
     root    {{$directoryRoot}};
 
     {{$driverNginxConfiguration}}
