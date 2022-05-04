@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Commands;
 
+use App\CertificateStore;
 use App\Models\Certificate;
 use App\Models\Project;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -37,6 +38,7 @@ class SecureTest extends TestCase
         $this->setupDefaultSettingsAndServices();
         $project = Project::factory()->create();
         Certificate::factory()->create();
+        $this->assertEquals('test', CertificateStore::make()->getCertificateDirectory());
 
         $this->assertFalse($project->isSecure());
 
