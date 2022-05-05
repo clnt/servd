@@ -6,7 +6,7 @@ on:
       - production
       - dev
     tags:
-      - *
+      - 1.*
   pull_request:
     branches: [ production ]
 
