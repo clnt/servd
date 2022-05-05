@@ -2,6 +2,7 @@
 
 namespace Feature\Commands;
 
+use App\Models\Service;
 use App\Models\Setting;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Mockery\MockInterface;
@@ -39,6 +40,9 @@ class UsePhpTest extends TestCase
             ->expectsConfirmation('Service rebuilt, would you like to restart containers now?', 'yes')
             ->expectsOutput('Restarting the configured services: ✔')
             ->assertSuccessful();
+
+        $this->assertEquals('8.0', Setting::get(Setting::KEY_PHP_VERSION));
+        $this->assertEquals('8.0', Service::where('service_name', 'servd')->first()->version);
     }
 
     /** @test */

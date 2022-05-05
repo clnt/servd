@@ -1,4 +1,9 @@
 # ServD
+<p>
+<a href="https://packagist.org/packages/clntdev/servd"><img src="https://poser.pugx.org/clntdev/servd/version" alt="Stable Build" /></a>
+<a href="https://github.com/clnt/servd/actions"><img src="https://github.com/clnt/servd/actions/workflows/.github-actions.yml/badge.svg" alt="CI Status" /></a>
+<a href="https://codecov.io/gh/clnt/servd"><img src="https://codecov.io/gh/clnt/servd/branch/production/graph/badge.svg?token=XD5TG940EV" alt="Code Coverage"/></a>
+</p>
 ServD is a Docker PHP development environment heavily inspired by Laravel Valet and Laradock, it supports multiple projects
 within a working directory and primarily runs on [Alpine Linux](https://alpinelinux.org/).
 

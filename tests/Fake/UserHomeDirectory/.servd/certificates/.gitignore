@@ -1,0 +1,5 @@
+*
+!example-project.test.crt
+!example-project.test.csr
+!example-project.test.key
+!.gitignore

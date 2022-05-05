@@ -6,3 +6,4 @@
 /database/database.sqlite
 /storage/logs/*
 *.DS_Store
+.env
