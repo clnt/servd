@@ -5,6 +5,8 @@ on:
     branches:
       - production
       - dev
+    tags:
+      - *
   pull_request:
     branches: [ production ]
 
