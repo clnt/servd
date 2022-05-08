@@ -2,7 +2,7 @@
     image: 'mariadb:10.4-focal'
     ports:
       - '${MARIADB_DB_PORT:-3306}:3306'
-    command: --max_allowed_packet=500M
+    command: --max_allowed_packet=500M --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
       MARIADB_PASSWORD: '${MARIADB_DB_PASSWORD}'
       MARIADB_ROOT_PASSWORD: '${MARIADB_DB_PASSWORD}'

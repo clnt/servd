@@ -26,8 +26,10 @@ class Laravel implements DriverContract
 
     public function detect(string $path): bool
     {
-        $path .= $this->directoryRoot() . '/index.php';
-
-        return file_exists($path) && str_contains(file_get_contents($path), 'Laravel');
+        return file_exists(
+            $path . $this->directoryRoot() . '/index.php'
+        ) && file_exists(
+            $path . '/artisan'
+        );
     }
 }
