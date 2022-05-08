@@ -70,7 +70,7 @@ jobs:
         run: |
           php -v
           cp .env.testing .env
-          composer lint
+          composer phpcs
 
   phpunit:
     runs-on: ubuntu-latest
