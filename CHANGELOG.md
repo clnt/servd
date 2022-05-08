@@ -1,3 +1,9 @@
+# 1.0.3 (2022-05-08)
+* Laravel driver fixed for Laravel 9
+* Nginx configuration modified to increase project allowance
+* Add PHPCS to GitHub Actions
+* Updated default database encoding for MySQL and MariaDB to `utf8mb4` and `utf8mb4_unicode_ci`
+
 # 1.0.2 (2022-05-04)
 * Github Actions workflow added to run tests including coverage sent to codecov
 * Fix tests failing on CI due to folders not being present

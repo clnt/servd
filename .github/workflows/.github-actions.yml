@@ -41,6 +41,37 @@ jobs:
           path: composer.tgz
           retention-days: 3
 
+  phpcs:
+    runs-on: ubuntu-latest
+    needs: [composer]
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Download composer artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: composer
+
+      - name: Unpack composer artifacts
+        run: |
+          tar xvfz composer.tgz
+
+      - name: Setup PHP with composer v2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer:v2
+
+      - name: Execute PHP_CodeSniffer
+        run: |
+          php -v
+          cp .env.testing .env
+          composer lint
+
   phpunit:
     runs-on: ubuntu-latest
     needs: [composer]
@@ -64,7 +95,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, soap, intl, gd, exif, iconv, imagick
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, soap, intl, exif, iconv
           coverage: xdebug
 
       - name: Execute tests
