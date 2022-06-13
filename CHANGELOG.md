@@ -1,3 +1,6 @@
+# 1.0.6 (2022-06-13)
+* Adjust Drupal driver for project detection
+
 # 1.0.5 (2022-06-13)
 * Add Drush v10 as global composer require in core container
 
