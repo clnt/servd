@@ -14,6 +14,7 @@ class Setting extends Model
     public const KEY_COMPOSER_VERSION = 'composerVersion';
     public const KEY_WORKING_DIRECTORY = 'workingDirectory';
     public const KEY_DATA_DIRECTORY = 'dataDirectory';
+    public const KEY_DRUSH_VERSION = 'drushVersion';
 
     /** @var string[] */
     protected $fillable = [

@@ -88,7 +88,7 @@ class ProjectSupervisor
             $directory,
             '/var/www/' . Str::afterLast($directory, '/') . $this->driverEngine->getDriverByIdentifier(
                 $driver
-            )->directoryRoot(),
+            )->directoryRoot($directory),
         ];
     }
 

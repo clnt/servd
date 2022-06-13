@@ -20,9 +20,36 @@ class DrupalTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_the_expected_directory_root(): void
+    public function it_can_get_the_expected_default_directory_root(): void
     {
         $this->assertEquals('/', Drupal::make()->directoryRoot());
+    }
+
+    /** @test */
+    public function it_checks_for_a_web_directory_if_given_project_path(): void
+    {
+        $this->assertEquals(
+            '/web',
+            Drupal::make()->directoryRoot(base_path('tests/Support/Projects/Drupal'))
+        );
+    }
+
+    /** @test */
+    public function it_returns_the_default_if_web_directory_not_found_and_given_project_path(): void
+    {
+        $this->assertEquals(
+            '/',
+            Drupal::make()->directoryRoot(base_path('tests/Support/Projects/Drupal/core'))
+        );
+    }
+
+    /** @test */
+    public function it_returns_the_default_if_web_directory_not_found_and_given_project_path_invalid(): void
+    {
+        $this->assertEquals(
+            '/',
+            Drupal::make()->directoryRoot(base_path('tests/Support/Projects/Drupal/invalid'))
+        );
     }
 
     /** @test */

@@ -14,8 +14,16 @@ class Drupal implements DriverContract
         return 'drupal';
     }
 
-    public function directoryRoot(): string
+    public function directoryRoot(?string $path = null): string
     {
+        if ($path === null) {
+            return '/';
+        }
+
+        if (file_exists($path)) {
+            return file_exists($path . '/web/index.php') ? '/web' : '/';
+        }
+
         return '/';
     }
 

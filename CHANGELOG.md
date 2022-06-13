@@ -1,3 +1,10 @@
+# 1.0.7 (2022-06-13)
+* Fix composer patching
+* Increase PHP memory_limit to 1024M
+* Increase PHP max_execution_time to 120
+* New command: servd drush:install (Drush install with version selection)
+* New command: servd drush:uninstall (Uninstall drush)
+
 # 1.0.6 (2022-06-13)
 * Adjust Drupal driver for project detection
 

@@ -14,6 +14,8 @@ services:
         NODE_VERSION: '${NODE_VERSION}'
         PHP_VERSION: '${PHP_VERSION}'
         COMPOSER_VERSION: '${COMPOSER_VERSION}'
+        INSTALL_DRUSH: '${INSTALL_DRUSH}'
+        DRUSH_VERSION: '${DRUSH_VERSION}'
     image: 'servd-core:${PHP_VERSION}'
     user: "1000:1000"
     ports:

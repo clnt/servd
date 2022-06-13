@@ -54,7 +54,8 @@ RUN apk update \
         mysql-client \
         postgresql-client \
         nginx \
-        supervisor;
+        supervisor \
+        patch;
 
 #---------------------------------------------------------------------
 # PHP Installation
@@ -137,6 +138,11 @@ RUN chmod +x /usr/bin/composer
 
 ENV PATH /home/servd/.composer/vendor/bin:$PATH
 
+ARG INSTALL_DRUSH
+ENV INSTALL_DRUSH ${INSTALL_DRUSH}
+ARG DRUSH_VERSION
+ENV DRUSH_VERSION ^${DRUSH_VERSION}
+
 USER root
 
 RUN chmod +x /usr/bin/supervisord
@@ -162,7 +168,12 @@ EXPOSE 9000 8080 443
 
 USER servd
 
-RUN composer global require drush/drush:^10
+#---------------------------------------------------------------------
+# Drush Installation
+#---------------------------------------------------------------------
+RUN if [ ${INSTALL_DRUSH} = true ]; then \
+    composer global require drush/drush:${DRUSH_VERSION} \
+;fi
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 

@@ -143,6 +143,8 @@ class DockerComposer
                 '{{$phpVersion}}',
                 '{{$composerVersion}}',
                 '{{$dataDirectory}}',
+                '{{$drushVersion}}',
+                '{{$installDrush}}',
             ],
             [
                 Setting::get(Setting::KEY_WORKING_DIRECTORY),
@@ -150,6 +152,8 @@ class DockerComposer
                 Setting::get(Setting::KEY_PHP_VERSION),
                 Setting::get(Setting::KEY_COMPOSER_VERSION),
                 Setting::get(Setting::KEY_DATA_DIRECTORY),
+                Setting::get(Setting::KEY_DRUSH_VERSION),
+                Setting::get(Setting::KEY_DRUSH_VERSION) !== null ? 'true' : 'false',
             ],
             file_get_contents($this->stubsPath . '/.env.stub')
         );
