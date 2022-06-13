@@ -1,3 +1,6 @@
+# 1.0.5 (2022-06-13)
+* Add Drush v10 as global composer require in core container
+
 # 1.0.4 (2022-05-10)
 * Fix Nginx configuration
 

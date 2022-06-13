@@ -135,6 +135,8 @@ COPY --from=node /usr/local/bin /usr/local/bin
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 RUN chmod +x /usr/bin/composer
 
+ENV PATH /home/servd/.composer/vendor/bin:$PATH
+
 USER root
 
 RUN chmod +x /usr/bin/supervisord
@@ -159,6 +161,8 @@ RUN chmod 775 /var/www-default && \
 EXPOSE 9000 8080 443
 
 USER servd
+
+RUN composer global require drush/drush:^10
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 
