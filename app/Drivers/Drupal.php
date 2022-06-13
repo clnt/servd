@@ -28,7 +28,12 @@ class Drupal implements DriverContract
     {
         return file_exists(
             $path . $this->directoryRoot() . 'misc/drupal.js'
-        ) || file_exists($path . $this->directoryRoot() . 'core/lib/Drupal.php') || str_contains(
+        ) || file_exists($path . $this->directoryRoot() . 'core/lib/Drupal.php') || $this->detectIndex($path);
+    }
+
+    private function detectIndex(string $path): bool
+    {
+        return file_exists($path . $this->directoryRoot() . 'index.php') && str_contains(
             file_get_contents($path . $this->directoryRoot() . 'index.php'),
             'Drupal'
         );
