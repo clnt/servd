@@ -27,18 +27,13 @@ class UsePhpTest extends TestCase
     {
         $this->setupDefaultSettingsAndServices();
 
-        $this->cli->shouldReceive('execRealTime')->times(2);
+        $this->cli->shouldReceive('execRealTime')->times(3);
 
         $this->assertEquals('8.1', Setting::get(Setting::KEY_PHP_VERSION));
 
         $this->artisan('use', ['version' => '8.0'])
             ->expectsOutput('Updating PHP version setting: ✔')
-            ->expectsOutput('Scanning working directory for projects: ✔')
-            ->expectsOutput('Rebuilding Docker files: ✔')
-            ->expectsOutput('Rebuilding project configurations: ✔')
-            ->expectsOutput('Rebuilding service: ✔')
             ->expectsConfirmation('Service rebuilt, would you like to restart containers now?', 'yes')
-            ->expectsOutput('Restarting the configured services: ✔')
             ->assertSuccessful();
 
         $this->assertEquals('8.0', Setting::get(Setting::KEY_PHP_VERSION));
