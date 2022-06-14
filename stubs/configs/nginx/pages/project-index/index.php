@@ -9,7 +9,7 @@
                 <p>
                     The project you are trying to access at <strong><?php echo $_SERVER['HTTP_HOST'] ?></strong> could not be found.
                     <br/><br/>
-                    If the directory exists in your working directory, run the rebuild command to scan it.
+                    If the directory exists in your working directory, run the scan command to detect it and restart containers.
                 </p>
                 <h2>Available Projects</h2>
                     {{$availableProjects}}

@@ -57,7 +57,8 @@ class UsePhp extends Command
         });
 
         if ($this->confirm('Service rebuilt, would you like to restart containers now?', 'yes')) { //phpcs:ignore
-            Artisan::call('restart');
+            $this->servd->stop();
+            $this->servd->start();
         }
     }
 }

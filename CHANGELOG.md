@@ -1,3 +1,7 @@
+# 1.0.8 (2022-06-14)
+* Fix use command by using docker-compose down & up
+* Add scan command to run configure and restart containers
+
 # 1.0.7 (2022-06-13)
 * Fix composer patching
 * Increase PHP memory_limit to 1024M
