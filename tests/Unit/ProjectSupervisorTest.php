@@ -1,6 +1,6 @@
 <?php
 
-namespace Unit;
+namespace Tests\Unit;
 
 use App\DriverEngine;
 use App\Drivers\Laravel;

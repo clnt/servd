@@ -1,6 +1,6 @@
 <?php
 
-namespace Unit\Console;
+namespace Tests\Unit\Console;
 
 use App\Console\DockerComposeCommand;
 use Tests\TestCase;

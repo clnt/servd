@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature\Commands;
+namespace Tests\Feature\Commands;
 
 use App\Commands\Exceptions\ErrorSettingWorkingDirectory;
 use App\Models\Service;

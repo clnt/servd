@@ -11,6 +11,7 @@ services:
       context: ./services/servd/build
       dockerfile: Dockerfile
       args:
+        TZ: '${TZ}'
         NODE_VERSION: '${NODE_VERSION}'
         PHP_VERSION: '${PHP_VERSION}'
         COMPOSER_VERSION: '${COMPOSER_VERSION}'

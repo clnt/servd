@@ -1,6 +1,6 @@
 <?php
 
-namespace Unit;
+namespace Tests\Unit;
 
 use App\Drivers\Exceptions\NoServicesEnabled;
 use App\Models\Service;

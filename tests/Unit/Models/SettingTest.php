@@ -1,6 +1,6 @@
 <?php
 
-namespace Unit\Models;
+namespace Tests\Unit\Models;
 
 use App\Models\Setting;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -23,6 +23,12 @@ class SettingTest extends TestCase
     public function it_can_get_the_setting_value(): void
     {
         $this->assertEquals($this->setting->value, Setting::get(Setting::KEY_PHP_VERSION));
+    }
+
+    /** @test */
+    public function it_returns_the_specified_default_setting_if_it_does_not_exist_in_database(): void
+    {
+        $this->assertEquals('test-default', Setting::get(Setting::KEY_TIMEZONE, 'test-default'));
     }
 
     /** @test */

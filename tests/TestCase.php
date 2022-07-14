@@ -76,6 +76,7 @@ class TestCase extends BaseTestCase
 
     protected function setupDefaultSettingsAndServices(): void
     {
+        Setting::factory()->create(['key' => Setting::KEY_TIMEZONE, 'value' => 'UTC']);
         Setting::factory()->create(['key' => Setting::KEY_PHP_VERSION, 'value' => '8.1']);
         Setting::factory()->create([
             'key' => Setting::KEY_WORKING_DIRECTORY,

@@ -1,6 +1,6 @@
 <?php
 
-namespace Unit\Models;
+namespace Tests\Unit\Models;
 
 use App\Models\Service;
 use Illuminate\Foundation\Testing\DatabaseMigrations;

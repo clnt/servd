@@ -30,6 +30,12 @@ List of commands:
 - Prompt for preferred options such as PHP version/Node Version and Composer Version
 - Prompt for confirmation of working directory, choose current directory or full path can be specified
 
+`servd set:timezone`
+
+- Set the timezone to be used by PHP and the core docker container
+- This must be a valid IANA Timezone such as Europe/London, America/New_York etc
+- The default timezone is UTC
+
 `servd start`
 
 - Start docker containers
@@ -41,17 +47,17 @@ List of commands:
 `servd restart`
 
 - Restart docker containers
-- Rebuild docker images with optional `--rebuild` flag.
+- Rebuild docker images with optional `--rebuild` flag
 
 `servd rebuild`
 
 - Rebuild docker containers
-- Update images with optional `--update` flag.
-- Rebuild/Update a specific container by specifying name as an argument: `servd rebuild mysql`.
+- Update images with optional `--update` flag
+- Rebuild/Update a specific container by specifying name as an argument: `servd rebuild mysql`
 
 `servd configure`
 
-- Regenerates configuration files and directory structures.
+- Regenerates configuration files and directory structures
 
 `servd use x.x`
 
@@ -62,19 +68,19 @@ List of commands:
 
 `servd secure`
 
-- Generates certificates and configures the current project for HTTPS, rebuilding config files and restarting services.
-- Note: You will need to ensure the created `servdCA.crt` CA is trusted by your machine.
+- Generates certificates and configures the current project for HTTPS, rebuilding config files and restarting services
+- Note: You will need to ensure the created `servdCA.crt` CA is trusted by your machine
 
 `servd unsecure`
 
-- Removes existing certificate files for a project and marks it as non secure, rebuilding config files and restarting services.
+- Removes existing certificate files for a project and marks it as non secure, rebuilding config files and restarting services
 
 `servd secure:trust`
 
-- **macOS (requires sudo)** - this command will attempt to add the CA certificate generated to the system.
-- **Linux & Windows Users** - you will need to manually add the `servdCA.crt` certificate authority file to your computer's certificate store.
+- **macOS (requires sudo)** - this command will attempt to add the CA certificate generated to the system
+- **Linux & Windows Users** - you will need to manually add the `servdCA.crt` certificate authority file to your computer's certificate store
 
->**Note for Firefox users:** You may need to trust the `servdCA.crt` file manually by importing it into Firefox's own certificate store (if site is secure in OS browser but not in Firefox then this is likely the reason why).
+>**Note for Firefox users:** You may need to trust the `servdCA.crt` file manually by importing it into Firefox's own certificate store (if site is secure in OS browser but not in Firefox then this is likely the reason why)
 
 `servd park`
 
@@ -86,7 +92,7 @@ List of commands:
 
 `servd cli {container(optional)}`
 
-- Open an interactive shell into the given container or the `servd_core` container by default if none specified.
+- Open an interactive shell into the given container or the `servd_core` container by default if none specified
 
 ## Supported Drivers
 
@@ -99,4 +105,4 @@ List of commands:
 
 ## Other
 
-Built with [Laravel Zero](https://laravel-zero.com/).
+Built with [Laravel Zero](https://laravel-zero.com/)

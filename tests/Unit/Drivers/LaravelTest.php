@@ -1,6 +1,6 @@
 <?php
 
-namespace Unit\Drivers;
+namespace Tests\Unit\Drivers;
 
 use App\Drivers\Laravel;
 use Tests\TestCase;

@@ -1,3 +1,9 @@
+# 1.0.9 (2022-07-14)
+* Timezone support, new `set:timezone` command added.
+* PHP `memory_limit` set to `-1`
+* PHP `max_input_time` set to `-1`
+* PHP `max_execution_time` set to `0`
+
 # 1.0.8 (2022-06-14)
 * Fix use command by using docker-compose down & up
 * Add scan command to run configure and restart containers

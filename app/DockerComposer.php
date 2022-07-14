@@ -138,6 +138,7 @@ class DockerComposer
     {
         $env = str_replace(
             [
+                '{{$timezone}}',
                 '{{$workingDirectory}}',
                 '{{$nodeVersion}}',
                 '{{$phpVersion}}',
@@ -147,6 +148,7 @@ class DockerComposer
                 '{{$installDrush}}',
             ],
             [
+                Setting::get(Setting::KEY_TIMEZONE, 'UTC'),
                 Setting::get(Setting::KEY_WORKING_DIRECTORY),
                 Setting::get(Setting::KEY_NODE_VERSION),
                 Setting::get(Setting::KEY_PHP_VERSION),

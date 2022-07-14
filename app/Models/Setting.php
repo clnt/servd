@@ -15,6 +15,7 @@ class Setting extends Model
     public const KEY_WORKING_DIRECTORY = 'workingDirectory';
     public const KEY_DATA_DIRECTORY = 'dataDirectory';
     public const KEY_DRUSH_VERSION = 'drushVersion';
+    public const KEY_TIMEZONE = 'timezone';
 
     /** @var string[] */
     protected $fillable = [
@@ -22,9 +23,9 @@ class Setting extends Model
         'value',
     ];
 
-    public static function get(string $key): ?string
+    public static function get(string $key, ?string $default = null): ?string
     {
-        return optional(self::where('key', $key)->first())->value;
+        return optional(self::where('key', $key)->first())->value ?? $default;
     }
 
     public static function find(string $key): ?self

@@ -1,6 +1,6 @@
 <?php
 
-namespace Unit;
+namespace Tests\Unit;
 
 use App\Console\Cli;
 use App\Providers\AppServiceProvider;

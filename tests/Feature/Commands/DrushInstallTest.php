@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature\Commands;
+namespace Tests\Feature\Commands;
 
 use App\Models\Setting;
 use Illuminate\Foundation\Testing\DatabaseMigrations;

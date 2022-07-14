@@ -123,6 +123,25 @@ class ServDocker
     public function setupDockerServiceFiles(string $directory): void
     {
         File::copyDirectory(base_path('stubs/docker/servd'), $directory . 'services/servd');
+
+        $this->updatePhpConfiguration($directory);
+    }
+
+    private function updatePhpConfiguration(string $directory): void
+    {
+        $path = $directory . '/services/servd/build/config/php.ini';
+
+        $ini = str_replace(
+            [
+                '{{$timezone}}',
+            ],
+            [
+                Setting::get(Setting::KEY_TIMEZONE, 'UTC'),
+            ],
+            file_get_contents($path)
+        );
+
+        File::put($path, $ini);
     }
 
     private function buildDirectoryStructure(Collection $services, string $directory): void

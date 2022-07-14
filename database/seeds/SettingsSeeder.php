@@ -11,5 +11,6 @@ class SettingsSeeder extends Seeder
     {
         Setting::create(['key' => Setting::KEY_PHP_VERSION, 'value' => '7.4']);
         Setting::create(['key' => Setting::KEY_WORKING_DIRECTORY, 'value' => null]);
+        Setting::create(['key' => Setting::KEY_TIMEZONE, 'value' => 'UTC']);
     }
 }

@@ -40,6 +40,7 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 RUN apk update \
     && apk upgrade \
     && apk --update-cache add ca-certificates \
+    && apk add tzdata \
     && apk add --no-cache \
         libedit-dev \
         libxml2-dev \
@@ -56,6 +57,14 @@ RUN apk update \
         nginx \
         supervisor \
         patch;
+
+
+#---------------------------------------------------------------------
+# Set timezone
+#---------------------------------------------------------------------
+ARG TZ
+ENV TZ ${TZ}
+RUN cp /usr/share/zoneinfo/${TZ} /etc/localtime
 
 #---------------------------------------------------------------------
 # PHP Installation
