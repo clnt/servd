@@ -36,10 +36,10 @@ class Service extends Model
     ];
 
     public static array $nodeVersions = [
-        'Node.js v12' => '12',
-        'Node.js v14 (LTS)' => '14',
-        'Node.js v16 (LTS)' => '16',
-        'Node.js v17 (Current)' => '17',
+        'Node.js v14' => '14',
+        'Node.js v16' => '16',
+        'Node.js v18 (LTS)' => '18',
+        'Node.js v21 (Current)' => '21',
     ];
 
     public static array $composerVersions = [
