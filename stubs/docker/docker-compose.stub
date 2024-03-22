@@ -14,7 +14,6 @@ services:
         TZ: '${TZ}'
         NODE_VERSION: '${NODE_VERSION}'
         PHP_VERSION: '${PHP_VERSION}'
-        COMPOSER_VERSION: '${COMPOSER_VERSION}'
         INSTALL_DRUSH: '${INSTALL_DRUSH}'
         DRUSH_VERSION: '${DRUSH_VERSION}'
     image: 'servd-core:${PHP_VERSION}'
@@ -25,9 +24,9 @@ services:
       - '${PHP_FPM_PORT:-9000}:9000'
     volumes:
       - ${WORKING_DIRECTORY}:/var/www
-      - ${DATA_DIRECTORY}pages:/var/www-default
-      - ${DATA_DIRECTORY}services/servd/build/sites:/etc/nginx/http.d
-      - ${DATA_DIRECTORY}certificates:/etc/nginx/ssl
+      - ${DATA_DIRECTORY}/pages:/var/www-default
+      - ${DATA_DIRECTORY}/services/servd/build/sites:/etc/nginx/http.d
+      - ${DATA_DIRECTORY}/certificates:/etc/nginx/ssl
     networks:
       - servd
     container_name: servd_core

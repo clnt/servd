@@ -39,8 +39,6 @@ class Install extends Command
 
     protected string $nodeVersion;
 
-    protected string $composerVersion;
-
     public function __construct(ServDocker $servd, ProjectSupervisor $supervisor, NginxComposer $nginxComposer)
     {
         $this->servd = $servd;
@@ -76,9 +74,6 @@ class Install extends Command
 
         // Select PHP Version
         $this->selectPhpVersion();
-
-        // Select Composer Version
-        $this->selectComposerVersion();
 
         // Select Database Software (MariaDB, MySQL, Postgresql)
         $this->selectDatabaseSoftware();
@@ -206,22 +201,6 @@ class Install extends Command
         );
 
         $this->successMessage('PHP version ' . $this->phpVersion . ' selected');
-    }
-
-    private function selectComposerVersion(): void
-    {
-        $this->composerVersion = $this->choice(
-            'Which Composer version would you like to use?',
-            Service::getComposerVersionChoices(),
-            '2'
-        );
-
-        Setting::updateOrCreate(
-            ['key' => Setting::KEY_COMPOSER_VERSION],
-            ['value' => Arr::get(Service::$composerVersions, $this->composerVersion)]
-        );
-
-        $this->successMessage('Composer version ' . $this->composerVersion . ' selected');
     }
 
     private function setWorkingDirectory(): void

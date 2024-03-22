@@ -38,14 +38,9 @@ class Service extends Model
     public static array $nodeVersions = [
         'Node.js v14' => '14',
         'Node.js v16' => '16',
-        'Node.js v18 (LTS)' => '18',
+        'Node.js v18' => '18',
+        'Node.js v20 (LTS)' => '20',
         'Node.js v21 (Current)' => '21',
-    ];
-
-    public static array $composerVersions = [
-        'Do not install' => '0',
-        'Composer v1 (Latest 1.x)' => '1',
-        'Composer v2 (Latest 2.2.x LTS)' => '2',
     ];
 
     public static function getServiceTypes(): array
@@ -117,14 +112,6 @@ class Service extends Model
     public static function getNodeVersionChoices(): array
     {
         return collect(self::$nodeVersions)
-            ->mapWithKeys(function (string $version, string $label): array {
-                return [$version => $label];
-            })->toArray();
-    }
-
-    public static function getComposerVersionChoices(): array
-    {
-        return collect(self::$composerVersions)
             ->mapWithKeys(function (string $version, string $label): array {
                 return [$version => $label];
             })->toArray();

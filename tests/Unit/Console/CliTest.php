@@ -44,10 +44,8 @@ class CliTest extends TestCase
 
     /**
      * Run the callback and return the captured output.
-     *
-     * @return false|string
      */
-    protected function captureOutput(callable $callback)
+    protected function captureOutput(callable $callback): false|string
     {
         ob_start();
         $callback();

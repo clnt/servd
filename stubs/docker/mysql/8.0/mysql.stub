@@ -14,7 +14,7 @@
       MYSQL_PASSWORD: '${MYSQL_DB_PASSWORD}'
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
     volumes:
-      - ${DATA_DIRECTORY}databases/mysql:/var/lib/mysql
+      - ${DATA_DIRECTORY}/databases/mysql:/var/lib/mysql
     networks:
       - servd
     container_name: servd_mysql

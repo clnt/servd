@@ -152,7 +152,6 @@ class DockerComposer
                 Setting::get(Setting::KEY_WORKING_DIRECTORY),
                 Setting::get(Setting::KEY_NODE_VERSION),
                 Setting::get(Setting::KEY_PHP_VERSION),
-                Setting::get(Setting::KEY_COMPOSER_VERSION),
                 Setting::get(Setting::KEY_DATA_DIRECTORY),
                 Setting::get(Setting::KEY_DRUSH_VERSION),
                 Setting::get(Setting::KEY_DRUSH_VERSION) !== null ? 'true' : 'false',
