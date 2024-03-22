@@ -40,10 +40,8 @@ abstract class CliCommand
 
     /**
      * Execute the command.
-     *
-     * @return string|int
      */
-    public function perform()
+    public function perform(): string|int
     {
         if ($this->isInteractive()) {
             return $this->cli->passthrough($this->prepare());

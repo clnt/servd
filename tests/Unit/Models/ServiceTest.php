@@ -54,7 +54,7 @@ class ServiceTest extends TestCase
 
         $this->assertEquals(8, Service::count());
         $this->assertEquals('servd', Service::first()->service_name);
-        $this->assertEquals('8.0', Service::first()->version);
+        $this->assertEquals('8.1', Service::first()->version);
     }
 
     /** @test */
@@ -66,9 +66,9 @@ class ServiceTest extends TestCase
 
         $service = Service::where('service_name', 'servd')->firstOrFail();
 
-        $this->assertEquals('8.0', $service->version);
+        $this->assertEquals('8.1', $service->version);
 
-        $service->update(['version' => '8.1']);
+        $service->update(['version' => '8.2']);
 
         $this->assertEquals(1, Service::where('service_name', 'servd')->count());
 
@@ -112,6 +112,8 @@ class ServiceTest extends TestCase
                 '7.4' => '7.4',
                 '8.0' => '8.0',
                 '8.1' => '8.1',
+                '8.2' => '8.2',
+                '8.3' => '8.3',
             ],
             Service::getPhpVersionChoices()
         );

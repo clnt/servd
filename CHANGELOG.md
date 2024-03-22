@@ -1,3 +1,9 @@
+# 1.1.0 (2024-03-22)
+* Available node versions updated to 14, 16, 18, 20 and 21
+* PHP 8.2 & 8.3 added to php version selection
+* Postgres versions updated
+* Removed composer version selection, now installs latest
+
 # 1.0.9 (2022-07-14)
 * Timezone support, new `set:timezone` command added.
 * PHP `memory_limit` set to `-1`

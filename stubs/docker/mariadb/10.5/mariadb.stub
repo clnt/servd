@@ -9,7 +9,7 @@
       MARIADB_ROOT_HOST: '%'
       MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
     volumes:
-      - ${DATA_DIRECTORY}databases/mariadb:/var/lib/mysql
+      - ${DATA_DIRECTORY}/databases/mariadb:/var/lib/mysql
     networks:
       - servd
     container_name: servd_mariadb

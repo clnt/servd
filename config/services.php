@@ -7,7 +7,7 @@ return [
         'type' => Service::TYPE_CORE,
         'name' => 'ServD',
         'service_name' => 'servd',
-        'version' => '8.0', // PHP Version
+        'version' => '8.1', // PHP Version
         'port' => '22,80,443,9000',
         'has_volume' => false,
         'should_build' => true,
@@ -15,6 +15,8 @@ return [
             '7.4',
             '8.0',
             '8.1',
+            '8.2',
+            '8.3',
         ],
     ],
     [
@@ -42,6 +44,11 @@ return [
             '10.4',
             '10.5',
             '10.6',
+            '10.11',
+            '11.0',
+            '11.1',
+            '11.2',
+            '11.3',
         ],
     ],
     [
@@ -53,6 +60,9 @@ return [
         'has_volume' => false,
         'available_versions' => [
             '13',
+            '14',
+            '15',
+            '16',
         ],
     ],
     [

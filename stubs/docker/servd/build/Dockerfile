@@ -1,12 +1,11 @@
 ARG PHP_VERSION
 ARG NODE_VERSION
-ARG COMPOSER_VERSION
 
-FROM node:${NODE_VERSION}-alpine3.15 AS node
-FROM composer:${COMPOSER_VERSION} AS composer
+FROM node:${NODE_VERSION}-alpine3.19 AS node
+FROM composer:latest AS composer
 WORKDIR /
 
-FROM php:${PHP_VERSION}-fpm-alpine3.15 as php
+FROM php:${PHP_VERSION}-fpm-alpine3.19 as php
 
 LABEL maintainer="Matt Clinton <matt@mattc.dev>"
 
@@ -69,10 +68,9 @@ RUN cp /usr/share/zoneinfo/${TZ} /etc/localtime
 #---------------------------------------------------------------------
 # PHP Installation
 #---------------------------------------------------------------------
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS imagemagick-dev \
     && pecl install uploadprogress \
     && docker-php-ext-enable uploadprogress \
-    && apk del .build-deps $PHPIZE_DEPS \
     && chmod uga+x /usr/local/bin/install-php-extensions && sync \
     && install-php-extensions bcmath \
         bz2 \
@@ -84,7 +82,6 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
         gd \
         gettext \
         igbinary \
-        imagick \
         imap \
         intl \
         ldap \
@@ -103,14 +100,26 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
         xmlrpc \
         xsl \
         redis \
-        xdebug \
         yaml \
         zip \
         msgpack \
 #    &&  echo -e "\n opcache.enable=1 \n opcache.enable_cli=1 \n opcache.memory_consumption=128 \n opcache.interned_strings_buffer=8 \n opcache.max_accelerated_files=4000 \n opcache.revalidate_freq=60 \n opcache.fast_shutdown=1" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini \
-    &&  echo -e "\n xdebug.remote_enable=1 \n xdebug.remote_host=localhost \n xdebug.remote_port=9000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+#    &&  echo -e "\n xdebug.remote_enable=1 \n xdebug.remote_host=localhost \n xdebug.remote_port=9000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     &&  echo -e "\n xhprof.output_dir='/var/tmp/xhprof'" >> /usr/local/etc/php/conf.d/docker-php-ext-xhprof.ini;
 
+RUN git clone https://github.com/Imagick/imagick.git --depth 1 /tmp/imagick && cd /tmp/imagick
+
+RUN cd /tmp/imagick && \
+    phpize && \
+    ./configure && \
+    make && \
+    make install
+
+RUN docker-php-ext-enable imagick
+
+RUN apk del .build-deps $PHPIZE_DEPS
+
+WORKDIR /
 #---------------------------------------------------------------------
 # PHP-FPM Configuration
 #---------------------------------------------------------------------
@@ -139,18 +148,13 @@ COPY --from=node /usr/local/include /usr/local/include
 COPY --from=node /usr/local/bin /usr/local/bin
 
 #---------------------------------------------------------------------
-# Composer Installation (specified version)
+# Composer Installation
 #---------------------------------------------------------------------
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 RUN chmod +x /usr/bin/composer
 
 ENV PATH /home/servd/.composer/vendor/bin:$PATH
-
-ARG INSTALL_DRUSH
-ENV INSTALL_DRUSH ${INSTALL_DRUSH}
-ARG DRUSH_VERSION
-ENV DRUSH_VERSION ^${DRUSH_VERSION}
 
 USER root
 
@@ -180,6 +184,10 @@ USER servd
 #---------------------------------------------------------------------
 # Drush Installation
 #---------------------------------------------------------------------
+ARG INSTALL_DRUSH
+ENV INSTALL_DRUSH ${INSTALL_DRUSH}
+ARG DRUSH_VERSION
+ENV DRUSH_VERSION ^${DRUSH_VERSION}
 RUN if [ ${INSTALL_DRUSH} = true ]; then \
     composer global require drush/drush:${DRUSH_VERSION} \
 ;fi

@@ -169,8 +169,6 @@ class InstallTest extends TestCase
             ->expectsOutput('Node.js version 16 selected ✔')
             ->expectsQuestion('Which PHP version would you like to use?', '7.4')
             ->expectsOutput('PHP version 7.4 selected ✔')
-            ->expectsQuestion('Which Composer version would you like to use?', '2')
-            ->expectsOutput('Composer version 2 selected ✔')
             ->expectsQuestion('Which database software would you like to use?', 'mysql')
             ->expectsQuestion('Which version of mysql would you like to use?', '5.7')
             ->expectsOutput('Default database preference mysql 5.7 successfully chosen ✔')
@@ -189,8 +187,6 @@ class InstallTest extends TestCase
             ->expectsQuestion('Which Node.js version would you like to use?', '16')
             ->expectsOutput('Node.js version 16 selected ✔')
             ->expectsQuestion('Which PHP version would you like to use?', '7.4')
-            ->expectsOutput('PHP version 7.4 selected ✔')
-            ->expectsQuestion('Which Composer version would you like to use?', '2')
-            ->expectsOutput('Composer version 2 selected ✔');
+            ->expectsOutput('PHP version 7.4 selected ✔');
     }
 }
